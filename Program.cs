@@ -1,127 +1,152 @@
-﻿using System;
-//Use the system class Random to get a random number and roll. 
-Random dice = new Random();
-int roll = dice.Next(1, 7);
-Console.WriteLine(roll);
+﻿/* 
+This C# console application is designed to:
+- Use arrays to store student names and assignment scores.
+- Use a `foreach` statement to iterate through the student names as an outer program loop.
+- Use an `if` statement within the outer loop to identify the current student name and access that student's assignment scores.
+- Use a `foreach` statement within the outer loop to iterate though the assignment scores array and sum the values.
+- Use an algorithm within the outer loop to calculate the average exam score for each student.
+- Use an `if-elseif-else` construct within the outer loop to evaluate the average exam score and assign a letter grade automatically.
+- Integrate extra credit scores when calculating the student's final score and letter grade as follows:
+    - detects extra credit assignments based on the number of elements in the student's scores array.
+    - divides the values of extra credit assignments by 10 before adding extra credit scores to the sum of exam scores.
+- use the following report format to report student grades: 
 
-//An instance of a class is called an Object.
-//Need to use the new operator to create the new secondDie object.
-//When calling the new operator on the randon class a few things are done.
-//1.) requests an address in the computers memory large enough to store the new object based on the Random class
-//2.) Creates a new object and stores it in the memory address
-//3.) Returns the memory address so the it can be saved in the secondDie variable
-Random secondDie = new Random();
-int secondDieResult = secondDie.Next(1,7);
+    Student         Grade
 
-//String interporlation example. Need to curly braccket every instance of the variable
-//Cannot simply write {roll & secondDieResult}
-Console.WriteLine($"You have rolled a {roll} & {secondDieResult}");
+    Sophia:         92.2    A-
+    Andrew:         89.6    B+
+    Emma:           85.6    B
+    Logan:          91.2    A-
+*/
+int examAssignments = 5;
 
-//There is a big difference between calling a Stateless and Stateful method.
-//A stateless method does not need to be created with the new keyword
-//A stateful method must be created with a new keyword.
-//Similar to calling new instances of classes in PHP $account = new Account();
+string[] studentNames = new string[] { "Sophia", "Andrew", "Emma", "Logan" };
 
-//Void Methods are methods that are designed to not return a value when they are finsihed
+int[] sophiaScores = new int[] { 90, 86, 87, 98, 100, 94, 90 };
+int[] andrewScores = new int[] { 92, 89, 81, 96, 90, 89 };
+int[] emmaScores = new int[] { 90, 85, 87, 98, 68, 89, 89, 89 };
+int[] loganScores = new int[] { 90, 95, 87, 88, 96, 96 };
 
-//Parameter vs Argument
-//Parameter is what is inside the method, while the argument is the value that is being passed through the method
+int[] studentScores = new int[10];
 
-//Overloaded Methods
-//Some methods are called overloaded methods, meaning they can different versions that can
-//accept differnt data types
-//Console.WriteLine() is an example of this, we can call this method with int, string, etc, but not combined
+string currentStudentLetterGrade = "";
 
-//Three examples of overloading in a method
-//We can can call the next method different ways to get different ranges
-Random die = new Random();
-int roll1 = dice.Next();
-int roll2 = dice.Next(101);
-int roll3 = dice.Next(50, 101);
+// display the header row for scores/grades
+Console.Clear();
+Console.WriteLine("Student\t\t Exam Score \t Overall\t Grade\tExtra Credit \n");
 
-Console.WriteLine($"First Roll: {roll1}");
-Console.WriteLine($"Second Roll: {roll2}");
-Console.WriteLine($"Third Roll: {roll3}");
-
-
-int firstValue = 500;
-int secondValue = 600;
-int largerValue = Math.Max(firstValue, secondValue);
-
-Console.WriteLine(largerValue);
-
-//Logic Excercise C#
-
-Random random = new Random();
-int daysUntilExpiration = random.Next(12);
-int discountPercentage = 0;
-
-if(daysUntilExpiration <= 10 && daysUntilExpiration > 5)
+/*
+The outer foreach loop is used to:
+- iterate through student names 
+- assign a student's grades to the studentScores array
+- sum assignment scores (inner foreach loop)
+- calculate numeric and letter grade
+- write the score report information
+*/
+foreach (string name in studentNames)
 {
-    Console.WriteLine("Your subscription will expire soon. Renew now!");
-} else if(daysUntilExpiration <=5 && daysUntilExpiration > 1)
-{
-    discountPercentage = 10;
-    Console.WriteLine($"Your subscription expires in {daysUntilExpiration} days.");
-    Console.WriteLine($"Renew now and save {discountPercentage}%!");
+    string currentStudent = name;
 
-} else if(daysUntilExpiration == 1){
-    discountPercentage = 20;
-    Console.WriteLine($"Your subscription expire within a day!");
-    Console.WriteLine($"Renew now and save {discountPercentage}%!");
-} else if(daysUntilExpiration == 0)
-{
-    Console.WriteLine("Your subscription has expired.");
+    if (currentStudent == "Sophia")
+        studentScores = sophiaScores;
 
-} else
-{
-    
-}
+    else if (currentStudent == "Andrew")
+        studentScores = andrewScores;
 
+    else if (currentStudent == "Emma")
+        studentScores = emmaScores;
 
-//Arrays in C#
-//Declare a new array
-string[] fraudulentOrderIDs = new string[3];
+    else if (currentStudent == "Logan")
+        studentScores = loganScores;
 
-//Outside of the explicit typing and defining the number of elements that can be stored in an array
-//The syntax for accessing elements in the array is the same as PHP
+    int sumAssignmentScores = 0;
 
-//Can also initialize an array same way PHP
-//string[] fraudulentOrderIDs = { "A123", "B456", "C789" };
+    //need to keep the sum of the exams separate and the sum of the extra credit assignments 
+    int sumExamScore = 0;
+    int sumExtraCredit = 0;
+    int numberOfExtraCreditAssignments = 0;
+    decimal extraCreditAveragePoints = 0;
 
-fraudulentOrderIDs[0] = "A123";
-fraudulentOrderIDs[1] = "B456";
-fraudulentOrderIDs[2] = "C789";
+    decimal currentStudentGrade = 0;
+    //Decimal value for the total number of extra credit points added.
+    decimal extraCreditPoints = 0;
+    decimal examScoreOnly = 0;
 
-Console.WriteLine($"First: {fraudulentOrderIDs[0]}");
-Console.WriteLine($"Second: {fraudulentOrderIDs[1]}");
-Console.WriteLine($"Third: {fraudulentOrderIDs[2]}");
+    int gradedAssignments = 0;
 
-//Tons of built in methods for arrays like .Length to get how many elements are in the array
-
-//For loops!!!
-foreach (string fraud in fraudulentOrderIDs)
-{
-    Console.WriteLine(fraud);
-}
-
-//For Loop Exercise:
-string[] orders =
-{
-    "B123",
-    "C234",
-    "A345",
-    "C15",
-    "B177",
-    "G3003",
-    "C235",
-    "B179"
-};
-
-foreach (string order in orders)
-{
-    if (order.StartsWith("B"))
+    /* 
+    the inner foreach loop sums assignment scores
+    extra credit assignments are worth 10% of an exam score
+    */
+    foreach (int score in studentScores)
     {
-        Console.WriteLine(order);
+        gradedAssignments += 1;
+
+        if (gradedAssignments <= examAssignments)
+        {
+            sumAssignmentScores += score;
+            sumExamScore += score;
+        } else
+        {
+            sumAssignmentScores += score / 10;
+            sumExtraCredit += score;
+            numberOfExtraCreditAssignments++;
+        }
+
     }
+
+    currentStudentGrade = Math.Round((decimal)(sumAssignmentScores) / examAssignments, 2);
+    examScoreOnly = Math.Round((decimal)(sumExamScore) / examAssignments, 2);
+    extraCreditAveragePoints = Math.Round((decimal)(sumExtraCredit) / numberOfExtraCreditAssignments, 2);
+    extraCreditPoints = Math.Round(currentStudentGrade - examScoreOnly, 2);
+
+    if (currentStudentGrade >= 97)
+        currentStudentLetterGrade = "A+";
+
+    else if (currentStudentGrade >= 93)
+        currentStudentLetterGrade = "A";
+
+    else if (currentStudentGrade >= 90)
+        currentStudentLetterGrade = "A-";
+
+    else if (currentStudentGrade >= 87)
+        currentStudentLetterGrade = "B+";
+
+    else if (currentStudentGrade >= 83)
+        currentStudentLetterGrade = "B";
+
+    else if (currentStudentGrade >= 80)
+        currentStudentLetterGrade = "B-";
+
+    else if (currentStudentGrade >= 77)
+        currentStudentLetterGrade = "C+";
+
+    else if (currentStudentGrade >= 73)
+        currentStudentLetterGrade = "C";
+
+    else if (currentStudentGrade >= 70)
+        currentStudentLetterGrade = "C-";
+
+    else if (currentStudentGrade >= 67)
+        currentStudentLetterGrade = "D+";
+
+    else if (currentStudentGrade >= 63)
+        currentStudentLetterGrade = "D";
+
+    else if (currentStudentGrade >= 60)
+        currentStudentLetterGrade = "D-";
+
+    else
+        currentStudentLetterGrade = "F";
+
+    // Student         Grade
+    // Sophia:         92.2    A-
+
+    Console.WriteLine($"{currentStudent}\t\t{examScoreOnly}\t{currentStudentGrade}\t{currentStudentLetterGrade}\t{extraCreditAveragePoints} ({extraCreditPoints} points)");
 }
+
+// required for running in VS Code (keeps the Output windows open to view results)
+Console.WriteLine("\n\rPress the Enter key to continue");
+Console.ReadLine();
+
+
