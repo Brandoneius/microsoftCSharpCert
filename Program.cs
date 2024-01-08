@@ -1,127 +1,76 @@
-﻿using System;
-//Use the system class Random to get a random number and roll. 
-Random dice = new Random();
-int roll = dice.Next(1, 7);
-Console.WriteLine(roll);
+﻿/* 
+ * Conditional Operator:
+ * <evaluate this condition> ? <if condition is true, return this value> : <if condition is false, return this value>
+ * 
+ * Also called ternary conditional operator
+ * 
+ * 
+ */
 
-//An instance of a class is called an Object.
-//Need to use the new operator to create the new secondDie object.
-//When calling the new operator on the randon class a few things are done.
-//1.) requests an address in the computers memory large enough to store the new object based on the Random class
-//2.) Creates a new object and stores it in the memory address
-//3.) Returns the memory address so the it can be saved in the secondDie variable
-Random secondDie = new Random();
-int secondDieResult = secondDie.Next(1,7);
+//Way to use the ternary operator to make this code only 3 lines
+using System;
 
-//String interporlation example. Need to curly braccket every instance of the variable
-//Cannot simply write {roll & secondDieResult}
-Console.WriteLine($"You have rolled a {roll} & {secondDieResult}");
-
-//There is a big difference between calling a Stateless and Stateful method.
-//A stateless method does not need to be created with the new keyword
-//A stateful method must be created with a new keyword.
-//Similar to calling new instances of classes in PHP $account = new Account();
-
-//Void Methods are methods that are designed to not return a value when they are finsihed
-
-//Parameter vs Argument
-//Parameter is what is inside the method, while the argument is the value that is being passed through the method
-
-//Overloaded Methods
-//Some methods are called overloaded methods, meaning they can different versions that can
-//accept differnt data types
-//Console.WriteLine() is an example of this, we can call this method with int, string, etc, but not combined
-
-//Three examples of overloading in a method
-//We can can call the next method different ways to get different ranges
-Random die = new Random();
-int roll1 = dice.Next();
-int roll2 = dice.Next(101);
-int roll3 = dice.Next(50, 101);
-
-Console.WriteLine($"First Roll: {roll1}");
-Console.WriteLine($"Second Roll: {roll2}");
-Console.WriteLine($"Third Roll: {roll3}");
+Random coin = new Random();
+int flip = coin.Next(0, 2);
+Console.WriteLine((flip == 0) ? "heads" : "tails");
 
 
-int firstValue = 500;
-int secondValue = 600;
-int largerValue = Math.Max(firstValue, secondValue);
+string permission = "|Manager";
+int level = 19;
 
-Console.WriteLine(largerValue);
+//This is an example of a working ternary operator. Good to know about, but kind of hard to read imo
+string response = (permission.Contains("Admin") || level >= 55 ? "Welcome, Super Admin User" : "");
 
-//Logic Excercise C#
+string userResponse = string.Empty;
 
-Random random = new Random();
-int daysUntilExpiration = random.Next(12);
-int discountPercentage = 0;
-
-if(daysUntilExpiration <= 10 && daysUntilExpiration > 5)
+if (permission.Contains("Admin"))
 {
-    Console.WriteLine("Your subscription will expire soon. Renew now!");
-} else if(daysUntilExpiration <=5 && daysUntilExpiration > 1)
+    if(level > 55)
+    {
+        userResponse = "Welcome, Super Admin user.";
+    } else
+    {
+        userResponse = "Weclome, Admin user.";
+    }
+} else if (permission.Contains("Manager"))
 {
-    discountPercentage = 10;
-    Console.WriteLine($"Your subscription expires in {daysUntilExpiration} days.");
-    Console.WriteLine($"Renew now and save {discountPercentage}%!");
-
-} else if(daysUntilExpiration == 1){
-    discountPercentage = 20;
-    Console.WriteLine($"Your subscription expire within a day!");
-    Console.WriteLine($"Renew now and save {discountPercentage}%!");
-} else if(daysUntilExpiration == 0)
-{
-    Console.WriteLine("Your subscription has expired.");
-
+    if(level >= 20)
+    {
+        userResponse = "Contact an Admin for access.";
+    } else
+    {
+        userResponse = "You do not have sufficent privileges.";
+    }
 } else
 {
-    
+    userResponse = "You do not have sufficient privileges";
 }
 
+Console.WriteLine(userResponse);
 
-//Arrays in C#
-//Declare a new array
-string[] fraudulentOrderIDs = new string[3];
+//Variable scope in C#
+//C# contains the same variable scope logic as PHP
 
-//Outside of the explicit typing and defining the number of elements that can be stored in an array
-//The syntax for accessing elements in the array is the same as PHP
+int[] numbers = { 4, 8, 15, 16, 23, 42 };
+int total = 0;
+bool found = false;
 
-//Can also initialize an array same way PHP
-//string[] fraudulentOrderIDs = { "A123", "B456", "C789" };
-
-fraudulentOrderIDs[0] = "A123";
-fraudulentOrderIDs[1] = "B456";
-fraudulentOrderIDs[2] = "C789";
-
-Console.WriteLine($"First: {fraudulentOrderIDs[0]}");
-Console.WriteLine($"Second: {fraudulentOrderIDs[1]}");
-Console.WriteLine($"Third: {fraudulentOrderIDs[2]}");
-
-//Tons of built in methods for arrays like .Length to get how many elements are in the array
-
-//For loops!!!
-foreach (string fraud in fraudulentOrderIDs)
+foreach (int number in numbers)
 {
-    Console.WriteLine(fraud);
-}
-
-//For Loop Exercise:
-string[] orders =
-{
-    "B123",
-    "C234",
-    "A345",
-    "C15",
-    "B177",
-    "G3003",
-    "C235",
-    "B179"
-};
-
-foreach (string order in orders)
-{
-    if (order.StartsWith("B"))
+    total += number;
+    if (number == 42)
     {
-        Console.WriteLine(order);
+        found = true;
+
     }
+
 }
+
+if (found)
+{
+    Console.WriteLine("Set contains 42");
+
+}
+
+Console.WriteLine($"Total: {total}");
+
