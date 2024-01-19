@@ -1,333 +1,179 @@
-﻿/* 
- * Conditional Operator:
- * <evaluate this condition> ? <if condition is true, return this value> : <if condition is false, return this value>
- * 
- * Also called ternary conditional operator
- * 
- * 
- */
-
-//Way to use the ternary operator to make this code only 3 lines
-using System;
-
-Random coin = new Random();
-int flip = coin.Next(0, 2);
-Console.WriteLine((flip == 0) ? "heads" : "tails");
-
-
-string permission = "|Manager";
-int level = 19;
-
-//This is an example of a working ternary operator. Good to know about, but kind of hard to read imo
-string response = (permission.Contains("Admin") || level >= 55 ? "Welcome, Super Admin User" : "Not a super user");
-
-string userResponse = string.Empty;
-
-if (permission.Contains("Admin"))
+﻿string[,] corporate =
 {
-    if(level > 55)
-    {
-        userResponse = "Welcome, Super Admin user.";
-    } else
-    {
-        userResponse = "Weclome, Admin user.";
-    }
-} else if (permission.Contains("Manager"))
+    {"Robert", "Bavin"}, {"Simon", "Bright"},
+    {"Kim", "Sinclair"}, {"Aashrita", "Kamath"},
+    {"Sarah", "Delucchi"}, {"Sinan", "Ali"}
+};
+
+string[,] external =
 {
-    if(level >= 20)
+    {"Vinnie", "Ashton"}, {"Cody", "Dysart"},
+    {"Shay", "Lawrence"}, {"Daren", "Valdes"}
+};
+
+string externalDomain = "hayworth.com";
+
+for (int i = 0; i < corporate.GetLength(0); i++)
+{
+    // display internal email addresses
+
+}
+
+internalDomainAddress(corporate);
+
+for (int i = 0; i < external.GetLength(0); i++)
+{
+    // display external email addresses
+}
+
+externalDomainAddress(external, externalDomain);
+
+void internalDomainAddress(string[,] userNames)
+{
+    //Note to loop through multidemsional arrays 
+    for (int i=0; i< userNames.GetLength(0); i++)
     {
-        userResponse = "Contact an Admin for access.";
-    } else
-    {
-        userResponse = "You do not have sufficent privileges.";
+        string first_two = userNames[i, 0].Substring(0,2).ToLower();
+        string email = first_two + userNames[i, 1].ToLower() + "@contoso.com";
+        Console.WriteLine($"{email}");
     }
+}
+
+void externalDomainAddress(string[,] userNames,string externalEmail)
+{
+    //Note to loop through multidemsional arrays 
+    for (int i = 0; i < userNames.GetLength(0); i++)
+    {
+        string first_two = userNames[i, 0].Substring(0, 2).ToLower();
+        string email = first_two + userNames[i, 1].ToLower() + externalEmail;
+        Console.WriteLine($"{email}");
+    }
+}
+
+
+
+double total = 0;
+double minimumSpend = 30.00;
+
+double[] items = { 15.97, 3.50, 12.25, 22.99, 10.98 };
+double[] discounts = { 0.30, 0.00, 0.10, 0.20, 0.50 };
+
+Console.WriteLine($"Total: ${total}");
+
+//Always need to assign the type of return value from methods in C#
+//If the method does not return any value, use the void keyword
+//As in the return is void 
+double GetDiscountedPrice(int itemIndex)
+{
+    // Calculate the discounted price of the item
+    double result = items[itemIndex] * (1 - discounts[itemIndex]);
+    return result;
+}
+
+bool TotalMeetsMinimum()
+{
+    // Check if the total meets the minimum
+    return total >= minimumSpend;
+}
+
+string FormatDecimal(double input)
+{
+    // Format the double so only 2 decimal places are displayed
+    return input.ToString().Substring(0,5);
+}
+
+for (int i = 0; i < items.Length; i++)
+{
+    total += GetDiscountedPrice(i);
+}
+
+if (TotalMeetsMinimum())
+{
+    total -= 5.00;
 } else
 {
-    userResponse = "You do not have sufficient privileges";
+    Console.WriteLine($"Total does not mean minium {total}");
 }
 
-Console.WriteLine(userResponse);
+Console.WriteLine($"Total: ${FormatDecimal(total)}");
 
-//Variable scope in C#
-//C# contains the same variable scope logic as PHP
+string[] words = { "racecar", "talented", "deified", "tent", "tenet" };
 
-int[] numbers = { 4, 8, 15, 16, 23, 42 };
-int total = 0;
-bool found = false;
-
-foreach (int number in numbers)
+Console.WriteLine("Is it a palindrome?");
+foreach (string word in words)
 {
-    total += number;
-    if (number == 42)
+    //This is cool, you can call functions and their return value within string interpolation! 
+    Console.WriteLine($"{word}: {IsPalindrome(word)}");
+}
+
+bool IsPalindrome(string word)
+{
+    int start = 0;
+    int end = word.Length - 1;
+
+    while (start < end)
     {
-        found = true;
-
-    }
-
-}
-
-if (found)
-{
-    Console.WriteLine("Set contains 42");
-
-}
-
-Console.WriteLine($"Total: {total}");
-
-
-
-//SWITCH STATEMENTS
-//Same syntax as a PHP switch statement! Including breaks and multiple cases
-//Switches in C# do not need to have a default value
-
-int employeeLevel = 300;
-string employeeName = "Hugh Mungus";
-
-string title = "";
-
-switch (employeeLevel)
-{
-    case 100:
-    case 200:
-        title = "Senior Associate";
-        break;
-    case 300:
-        title = "Manager";
-        break;
-    case 400:
-        title = "Senior Manager";
-        break;
-    default:
-        title = "Associate";
-        break;
-}
-
-Console.WriteLine($"{employeeName}, {title}");
-
-//Refactor this into switch statements:
-// SKU = Stock Keeping Unit. 
-// SKU value format: <product #>-<2-letter color code>-<size code>
-string sku = "01-MN-L";
-
-//This operator turns the string into an array split on the - character. 
-string[] product = sku.Split('-');
-
-string type = "";
-string color = "";
-string size = "";
-
-switch (product[0])
-{
-    case "01":
-        type = "Sweat shirt";
-        break;
-    case "02":
-        type = "T-Shirt";
-        break;
-    case "03":
-        type = "Sweat pants";
-        break;
-    default:
-        type = "Other";
-        break;
-}
-
-switch (product[1])
-{
-    case "BL":
-        color = "Black";
-        break;
-    case "MN":
-        color = "Maroon";
-        break;
-    default:
-        color = "White";
-        break;
-
-}
-
-switch (product[2])
-{
-    case "S":
-        size = "Small";
-        break;
-    case "M":
-        size = "Medium";
-        break;
-    case "L":
-        size = "Large";
-        break;
-    default:
-        size = "One Size Fits All";
-        break;
-}
-
-
-Console.WriteLine($"Product: {size} {color} {type}");
-
-
-
-//FOR Statement
-//Useful for multidimensional arrays that the foreach loop would not work
-//Same syntax as Python!
-
-for (int i = 0; i < 10; i++)
-{
-    Console.WriteLine(i);
-}
-
-//Loop through an array with the for
-
-string[] names = { "Raya", "Molly", "Brandon", "Ares" };
-
-for (int i = 0; i < names.Length; i++)
-{
-    //If the name is Ares, we want to change it to Gunter! 
-    if (names[i] == "Ares")
-    {
-        names[i] = "Gunter";
-    }
-}
-
-foreach (var name in names)
-{
-    Console.WriteLine(name);
-}
-
-/*
- * 
- * ->The for iteration statement allows you to iterate through a block of code a specific number of times.
-   ->  The for iteration statement allows you to control every aspect of the iteration's mechanics by altering the three conditions inside the parenthesis: the initializer, condition, and iterator.
-   ->It's common to use the for statement when you need to control how you want to iterate through each item in an array.
-If your code block has only one line of code, you can eliminate the curly braces and white space if you wish.
- * 
- */
-
-
-/*
- * Here are the FizzBuzz rules that you need to implement in your code project:
-Output values from 1 to 100, one number per line, inside the code block of an iteration statement.
-When the current value is divisible by 3, print the term Fizz next to the number.
-When the current value is divisible by 5, print the term Buzz next to the number.
-When the current value is divisible by both 3 and 5, print the term FizzBuzz next to the number.
- * 
- * 
- */
-
-string fizzBuzz = string.Empty;
-for (int i = 1; i < 101; i++)
-{
-    if (i % 3 == 0 && i % 5 == 0)
-    {
-        fizzBuzz = "- FizzBuzz";
-    } else if(i % 5 == 0)
-    {
-        fizzBuzz = "- Buzz";
-    } else if (i % 3 == 0)
-    {
-        fizzBuzz = "- Fizz";
-    }
-
-    Console.WriteLine($"{i} {fizzBuzz}");
-    fizzBuzz = "";
-}
-
-//DO WHILE LOOP
-
-Random random = new Random();
-int current = 0;
-int numberOfIterations = 0;
-
-do
-{
-    current = random.Next(1, 11);
-    Console.WriteLine(current);
-    numberOfIterations++;
-} while (current != 7);
-
-Console.WriteLine($"Number of iterations until 7 is rolled: {numberOfIterations}");
-
-
-//Monster Game do While Loop
-//Player attacks first
-
-Random attackDamageInstance = new Random();
-int playerHP = 10;
-int monsterHP = 10;
-bool gameOver = false;
-
-do
-{
-    //Player attacks first
-    int playerDamage = attackDamageInstance.Next(1, 11);
-    monsterHP -= playerDamage;
-    Console.WriteLine($"Monster was damaged and lost {playerDamage} and now has {monsterHP} health.");
-    if (monsterHP <= 0)
-    {
-        Console.WriteLine("Player Wins! :D");
-        gameOver = true;
-        break;
-    }
-
-    //Monster Attacks
-    int monsterDamage = attackDamageInstance.Next(1, 11);
-    playerHP -= monsterDamage;
-    Console.WriteLine($"Hero was damaged and lost {monsterDamage} and now has {playerHP} health.");
-    if (playerHP <= 0)
-    {
-        Console.WriteLine("Monster Wins! :(");
-        gameOver = true;
-        break;
-    }
-
-} while (!gameOver);
-
-//The solved solution had a pretty good idea with the ternary operator for this
-
-/*
- * 
- * while (hero > 0 && monster > 0);
-
-Console.WriteLine(hero > monster ? "Hero wins!" : "Monster wins!");
-
-*/
-
-//Interesting Syntax Alert!!!!
-//Question Mark after the string type declaration is a nullable type string
-//This do while loop will keep running until a null string has been submitted by the user
-string? readResult;
-Console.WriteLine("Enter a string:");
-do
-{
-    readResult = Console.ReadLine();
-} while (readResult == null);
-
-bool runningNumberScript = true;
-bool isNumber = false;
-int userSubmittedNumber = 0;
-
-Console.WriteLine("Enter an integer value between 5 and 10");
-string userInput = "";
-do
-{
-    userInput = Console.ReadLine();
-    //Cool method here, the TryParse method will give a True response if this is a number, and reassign the userSubmittedNumber in the same line
-    isNumber = int.TryParse(userInput, out userSubmittedNumber);
-
-    if (isNumber)
-    {
-        if (userSubmittedNumber >= 5 && userSubmittedNumber <= 10)
+        if (word[start] != word[end])
         {
-            Console.WriteLine($"Your input value of ({userSubmittedNumber}) has been accepted");
-            runningNumberScript = false;
-        } else
-        {
-            Console.WriteLine($"You entered {userSubmittedNumber}. Please enter a number between 5 and 10");
+            return false;
         }
+        start++;
+        end--;
+    }
+
+    return true;
+}
+
+
+//DICE GAME CHALLENGE
+Random random = new Random();
+
+Console.WriteLine("Would you like to play? (Y/N)");
+string initialAnswer = Console.ReadLine();
+if (ShouldPlay(initialAnswer))
+{
+    PlayGame();
+}
+
+void PlayGame()
+{
+    var play = true;
+
+    while (play)
+    {
+        //Code solution created methods for these and left them as var data types
+        //I dont see the big difference in doing this vs my solution
+        int target = random.Next(1,6);
+        int roll = random.Next(1,7);
+
+        Console.WriteLine($"Roll a number greater than {target} to win!");
+        Console.WriteLine($"You rolled a {roll}");
+        Console.WriteLine(WinOrLose(target, roll));
+        Console.WriteLine("\nPlay again? (Y/N)");
+        string ?continuePlaying = Console.ReadLine();
+        play = ShouldPlay(continuePlaying);
+    }
+}
+
+bool ShouldPlay(string answer)
+{
+    string answerTrimmed = answer.ToLower().Trim();
+    if (answerTrimmed == "y")
+    {
+        return true;
+    }else
+    {
+        return false;
+    }
+}
+
+string WinOrLose(int targetNumber, int playerRoll)
+{
+    if(targetNumber > playerRoll)
+    {
+        return "You lose!";
     } else
     {
-        Console.WriteLine("Sorry, you entered an invalid number. Please try again!");
+        return "You win!";
     }
-
-
-} while (runningNumberScript);
+}
